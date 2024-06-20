@@ -20,57 +20,23 @@ proxy-groups:
 <% proxies.forEach(({ name }) => { %>
       <%= `- ${name}` -%>
 <% }) %>
-  - name: 🎥 NETFLIX
-    type: select
-    proxies:
-      - 🔰 PROXY
-      - 🎯 DIRECT<% -%>
-<% proxies.forEach(({ name }) => { %>
-      <%= `- ${name}` -%>
-<% }) %>
+<%- include('./select', {name:'🎥 NETFLIX',proxies}) %>
   - name: ⛔️ AdBlock
     type: select
     proxies:
       - 🛑 REJECT
       - 🎯 DIRECT
       - 🔰 PROXY
-  - name: 🌍 Foreign
-    type: select
-    proxies:
-      - 🔰 PROXY
-      - 🎯 DIRECT<% -%>
-<% proxies.forEach(({ name }) => { %>
-      <%= `- ${name}` -%>
-<% }) %>
+<%- include('./select', {name:'🌍 Foreign',proxies}) %>
   - name: 🌏 Inland
     type: select
     proxies:
       - 🎯 DIRECT
       - 🔰 PROXY
-  - name: Ⓜ️ Microsoft
-    type: select
-    proxies:
-      - 🎯 DIRECT
-      - 🔰 PROXY<% -%>
-<% proxies.forEach(({ name }) => { %>
-      <%= `- ${name}` -%>
-<% }) %>
-  - name: 📲 Telegram
-    type: select
-    proxies:
-      - 🔰 PROXY
-      - 🎯 DIRECT<% -%>
-<% proxies.forEach(({ name }) => { %>
-      <%= `- ${name}` -%>
-<% }) %>
-  - name: 🍎 Apple
-    type: select
-    proxies:
-      - 🔰 PROXY
-      - 🎯 DIRECT<% -%>
-<% proxies.forEach(({ name }) => { %>
-      <%= `- ${name}` -%>
-<% }) %>
+<%- include('./select', {name:'Ⓜ️ Microsoft',proxies}) %>
+<%- include('./select', {name:'📲 Telegram',proxies}) %>
+<%- include('./select', {name:'🍎 Apple',proxies}) %>
+<%- include('./select', {name:'🐟 Others',proxies}) %>
   - name: 🎯 DIRECT
     type: select
     proxies:
@@ -80,14 +46,6 @@ proxy-groups:
     proxies:
       - REJECT
       - DIRECT
-  - name: 🐟 Others
-    type: select
-    proxies:
-      - 🔰 PROXY
-      - 🎯 DIRECT<% -%>
-<% proxies.forEach(({ name }) => { %>
-      <%= `- ${name}` -%>
-<% }) %>
 rules:
   - DOMAIN-SUFFIX,local,🎯 DIRECT
   - IP-CIDR,192.168.0.0/16,🎯 DIRECT,no-resolve

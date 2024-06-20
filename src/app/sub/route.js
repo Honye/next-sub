@@ -31,7 +31,7 @@ const fetchProxies = async (url) => {
     if (/^ss:\/\//.test(line)) {
       const i = line.indexOf('#')
       let name = line.substring(i + 1)
-      name = name.match(/@(.*?)\./)[1]
+      name = name.match(/@(.*?)\./)?.[1] || name
       const decry = atob(line.substring(5, i))
       const regex = /^(.*?):(.*?)@(.*?):(\d+)$/
       const [_, cipher, password, server, port] = decry.match(regex)

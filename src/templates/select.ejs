@@ -1,0 +1,8 @@
+  - name: <%= name %>
+    type: select
+    proxies:
+      - 🔰 PROXY
+      - 🎯 DIRECT<% -%>
+<% proxies.forEach(({ name }) => { %>
+      <%= `- ${name}` -%>
+<% }) %>
