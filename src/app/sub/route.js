@@ -74,6 +74,15 @@ const fetchProxies = async (url) => {
 export async function GET(request) {
   const { searchParams } = request.nextUrl
   const url = searchParams.get('url') || subscription
+  if (!url) {
+    return new Response('No env, no subscription.', {
+      status: 400,
+      headers: {
+        'Content-Type': 'text/html;charset=utf-8'
+      }
+    })
+  }
+
   const proxies = await fetchProxies(url)
   const result = await new Promise((resolve, reject) => {
     ejs.renderFile(
