@@ -10,6 +10,8 @@ proxies:<% -%>
   <%= `- { name: ${proxy.name}, server: ${proxy.server}, port: ${proxy.port}, type: ${proxy.type}, cipher: ${proxy.cipher}, password: ${proxy.password} }` -%>
 <% } else if (proxy.type === 'vmess') { -%>
   <%= `- { name: ${proxy.name}, server: ${proxy.server}, port: ${proxy.port}, type: ${proxy.type}, uuid: ${proxy.uuid}, cipher: ${proxy.cipher}, alterId: ${proxy.alterId}, udp: ${proxy.udp}, tls: ${proxy.tls} }` -%>
+<% } else if (proxy.type === 'ssr') { -%>
+  <%= `- { name: ${proxy.name}, server: ${proxy.server}, port: ${proxy.port}, type: ${proxy.type}, cipher: ${proxy.cipher}, password: ${proxy.password}, protocol: ${proxy.protocol}, obfs: ${proxy.obfs}, 'protocol-param': ${proxy['protocol-param']}, 'obfs-param': ${proxy['obfs-param']} }` -%>
 <% } -%>
 <% }) %>
 proxy-groups:

@@ -1,25 +1,9 @@
 import path from 'node:path'
 import ejs from 'ejs'
+import { parseVmess, parseSS, parseSSR } from './parser'
 
 const subscription = process.env.SUBSCRIPTION_URL
 const confPath = path.resolve(process.cwd(), 'src/templates', 'config.ejs')
-
-/**
- * 是否存在值
- * @template T
- * @param {T} value
- * @returns {value is NonNullable<T>}
- */
-const isPresent = (value) => typeof value !== 'undefined' && value !== null
-
-/**
- * @template T
- * @param {T} value
- * @param {NonNullable<T>} defaultValue
- */
-const getIfPresent = (value, defaultValue) => {
-  return isPresent(value) ? value : defaultValue
-}
 
 /**
  * @param {string} url
@@ -29,41 +13,11 @@ const fetchProxies = async (url) => {
   const lines = atob(text).split('\n')
   return lines.map((line) => {
     if (/^ss:\/\//.test(line)) {
-      const i = line.indexOf('#')
-      let name = line.substring(i + 1)
-      name = name.match(/@(.*?)\./)?.[1] || name
-      const decry = atob(line.substring(5, i))
-      const regex = /^(.*?):(.*?)@(.*?):(\d+)$/
-      const [_, cipher, password, server, port] = decry.match(regex)
-      return { name, server, port, cipher, password, type: 'ss' }
+      return parseSS(line)
     } else if (/^vmess:\/\//.test(line)) {
-      /**
-       * @typedef {object} Vmess
-       * @property {string} ps
-       * @property {string} port
-       * @property {string} id
-       * @property {number} aid
-       * @property {string} net
-       * @property {string} type
-       * @property {'none'|boolean} tls
-       * @property {string} add
-       * @property {string} [scy]
-       */
-      /** @type {Vmess} */
-      const decry = JSON.parse(atob(line.substring(8)))
-      let name = decry.ps
-      name = name.match(/@(.*?)\./)[1]
-      return {
-        name,
-        server: decry.add,
-        port: decry.port,
-        type: 'vmess',
-        uuid: decry.id,
-        alterId: decry.aid,
-        udp: true,
-        tls: decry.tls === true,
-        cipher: getIfPresent(decry.scy, 'auto')
-      }
+      return parseVmess(line)
+    } else if (/^ssr:\/\//.test(line)) {
+      return parseSSR(line)
     }
   })
 }
