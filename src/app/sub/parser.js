@@ -1,4 +1,5 @@
 import { getIfPresent, getIfNotBlank } from '@/utils/base'
+import { decode } from 'js-base64'
 
 /**
  * @param {string} str
@@ -64,7 +65,7 @@ export function parseSS(str) {
  */
 export function parseSSR(str) {
   const [decry, search] = atob(str.substring(6)).split('/?')
-  const regex = /^(\S+):(\d+?):(\S+?):(\S+?):(\S+?):(\S+?)/
+  const regex = /^(\S+):(\d+?):(\S+?):(\S+?):(\S+?):(\S+)/
   const [_, server, port, protocol, cipher, obfs, password] = decry.match(regex)
   /** @type {ClashSSR} */
   const proxy = { type: 'ssr', server, port, protocol, cipher, obfs, password: atob(password) }
@@ -72,7 +73,7 @@ export function parseSSR(str) {
     const params = new URLSearchParams(search)
     proxy['obfs-param'] = atob(params.get('obfsparam'))
     proxy['protocol-param'] = atob(params.get('protoparam'))
-    proxy.name = atob(params.get('remarks'))
+    proxy.name = decode(params.get('remarks'))
     proxy.group = atob(params.get('group'))
     proxy.udpport = params.get('udpport')
     proxy.uot = params.get('uot')

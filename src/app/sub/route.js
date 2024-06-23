@@ -1,16 +1,23 @@
 import path from 'node:path'
+import { Agent } from 'undici'
 import ejs from 'ejs'
 import { parseVmess, parseSS, parseSSR } from './parser'
 
 const subscription = process.env.SUBSCRIPTION_URL
 const confPath = path.resolve(process.cwd(), 'src/templates', 'config.ejs')
 
+const agent = new Agent({
+  connect: {
+    rejectUnauthorized: false
+  }
+})
+
 /**
  * @param {string} url
  */
 const fetchProxies = async (url) => {
-  const text = await fetch(url).then((resp) => resp.text())
-  const lines = atob(text).split('\n')
+  const text = await fetch(url, { dispatcher: agent }).then((resp) => resp.text())
+  const lines = atob(text).trim().split('\n')
   return lines.map((line) => {
     if (/^ss:\/\//.test(line)) {
       return parseSS(line)
@@ -18,6 +25,8 @@ const fetchProxies = async (url) => {
       return parseVmess(line)
     } else if (/^ssr:\/\//.test(line)) {
       return parseSSR(line)
+    } else {
+      return { type: 'unkown' }
     }
   })
 }

@@ -1,6 +1,10 @@
 Maybe this isn't for you.
 
-Convert [Just My Socks](https://justmysocks.net/members/aff.php?aff=31408) subscription to [Clash](https://clash.wiki/) configuration.
+Convert [Just My Socks](https://justmysocks.net/members/aff.php?aff=31408) (VMESS, SS) subscription to [Clash](https://clash.wiki/) configuration.
+
+Also support:
+
+- [XLinkWorld](https://www.xlinkworld.cc) (SSR)
 
 Usage:
 
