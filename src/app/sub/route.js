@@ -5,6 +5,8 @@ import { parseVmess, parseSS, parseSSR } from './parser'
 
 const subscription = process.env.SUBSCRIPTION_URL
 const confPath = path.resolve(process.cwd(), 'src/templates', 'config.ejs')
+const compSelect = path.resolve(process.cwd(), 'src/templates', 'select.ejs')
+console.log('Dont remove', typeof compSelect)
 
 const agent = new Agent({
   connect: {
