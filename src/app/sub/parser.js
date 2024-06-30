@@ -2,7 +2,20 @@ import { getIfPresent, getIfNotBlank } from '@/utils/base'
 import { decode } from 'js-base64'
 
 /**
+ * @typedef ClashVmess
+ * @property {'vmess'} type
+ * @property {string} name
+ * @property {string} server
+ * @property {string} port
+ * @property {string} uuid
+ * @property {number} alterId
+ * @property {boolean} udp
+ * @property {boolean} tls
+ * @property {string} cipher
+ */
+/**
  * @param {string} str
+ * @returns {ClashVmess}
  */
 export function parseVmess(str) {
   /**
@@ -35,7 +48,17 @@ export function parseVmess(str) {
 }
 
 /**
+ * @typedef {object} ClashSS
+ * @property {'ss'} type
+ * @property {string} name
+ * @property {string} server
+ * @property {string} port
+ * @property {string} cipher
+ * @property {string} password
+ */
+/**
  * @param {string} str
+ * @returns {ClashSS}
  */
 export function parseSS(str) {
   const i = str.indexOf('#')
@@ -80,3 +103,7 @@ export function parseSSR(str) {
   }
   return proxy
 }
+
+/**
+ * @typedef {ClashSS|ClashSSR|ClashVmess} ClashConfig
+ */
