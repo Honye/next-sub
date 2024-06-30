@@ -432,7 +432,7 @@
   },
   "experimental": {
     "cache_file": {
-      "enabled": false
+      "enabled": true
     },
     "clash_api": {
       "external_controller": "0.0.0.0:9090",

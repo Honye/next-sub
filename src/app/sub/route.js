@@ -39,9 +39,10 @@ const fetchProxies = async (url) => {
  */
 const genSingBoxConfig = (proxies) => {
   const tags = []
+  const outbounds = []
   for (const proxy of proxies) {
     if (proxy.type === 'ss') {
-      base.outbounds.push({
+      outbounds.push({
         type: 'shadowsocks',
         tag: proxy.name,
         server: proxy.server,
@@ -51,10 +52,10 @@ const genSingBoxConfig = (proxies) => {
       })
       tags.push(proxy.name)
     } else if (proxy.type === 'ssr') {
-      // base.outbounds.push({})
+      // outbounds.push({})
       // tags.push(proxy.name)
     } else if (proxy.type === 'vmess') {
-      base.outbounds.push({
+      outbounds.push({
         type: 'vmess',
         tag: proxy.name,
         server: proxy.server,
@@ -68,7 +69,7 @@ const genSingBoxConfig = (proxies) => {
       tags.push(proxy.name)
     }
   }
-  base.outbounds.push(
+  outbounds.push(
     ...['Proxy', 'OpenAI', 'TikTok'].map((tag) => ({
       tag,
       type: 'selector',
@@ -76,6 +77,7 @@ const genSingBoxConfig = (proxies) => {
       default: tags[0]
     })),
   )
+  base.outbounds = [...base.outbounds, ...outbounds]
   return base
 }
 
