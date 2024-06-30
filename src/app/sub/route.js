@@ -38,11 +38,10 @@ const fetchProxies = async (url) => {
  * @param {import('./parser').ClashConfig[]} proxies
  */
 const genSingBoxConfig = (proxies) => {
-  const outbounds = []
   const tags = []
   for (const proxy of proxies) {
     if (proxy.type === 'ss') {
-      outbounds.push({
+      base.outbounds.push({
         type: 'shadowsocks',
         tag: proxy.name,
         server: proxy.server,
@@ -52,10 +51,10 @@ const genSingBoxConfig = (proxies) => {
       })
       tags.push(proxy.name)
     } else if (proxy.type === 'ssr') {
-      // outbounds.push({})
+      // base.outbounds.push({})
       // tags.push(proxy.name)
     } else if (proxy.type === 'vmess') {
-      outbounds.push({
+      base.outbounds.push({
         type: 'vmess',
         tag: proxy.name,
         server: proxy.server,
@@ -69,7 +68,7 @@ const genSingBoxConfig = (proxies) => {
       tags.push(proxy.name)
     }
   }
-  outbounds.push(
+  base.outbounds.push(
     ...['Proxy', 'OpenAI', 'TikTok'].map((tag) => ({
       tag,
       type: 'selector',
@@ -77,7 +76,6 @@ const genSingBoxConfig = (proxies) => {
       default: tags[0]
     })),
   )
-  base.outbounds = outbounds
   return base
 }
 

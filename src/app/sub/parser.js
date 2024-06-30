@@ -6,7 +6,7 @@ import { decode } from 'js-base64'
  * @property {'vmess'} type
  * @property {string} name
  * @property {string} server
- * @property {string} port
+ * @property {number} port
  * @property {string} uuid
  * @property {number} alterId
  * @property {boolean} udp
@@ -37,7 +37,7 @@ export function parseVmess(str) {
   return {
     name,
     server: decry.add,
-    port: decry.port,
+    port: Number(decry.port),
     type: 'vmess',
     uuid: decry.id,
     alterId: decry.aid,
@@ -52,7 +52,7 @@ export function parseVmess(str) {
  * @property {'ss'} type
  * @property {string} name
  * @property {string} server
- * @property {string} port
+ * @property {number} port
  * @property {string} cipher
  * @property {string} password
  */
@@ -67,14 +67,14 @@ export function parseSS(str) {
   const decry = atob(str.substring(5, i))
   const regex = /^(.*?):(.*?)@(.*?):(\d+)$/
   const [_, cipher, password, server, port] = decry.match(regex)
-  return { name, server, port, cipher, password, type: 'ss' }
+  return { name, server, port: Number(port), cipher, password, type: 'ss' }
 }
 
 /**
  * @typedef {object} ClashSSR
  * @property {'ssr'} type
  * @property {string} server
- * @property {string} port
+ * @property {number} port
  * @property {string} protocol
  * @property {string} cipher
  * @property {string} obfs
@@ -91,7 +91,7 @@ export function parseSSR(str) {
   const regex = /^(\S+):(\d+?):(\S+?):(\S+?):(\S+?):(\S+)/
   const [_, server, port, protocol, cipher, obfs, password] = decry.match(regex)
   /** @type {ClashSSR} */
-  const proxy = { type: 'ssr', server, port, protocol, cipher, obfs, password: atob(password) }
+  const proxy = { type: 'ssr', server, port: Number(port), protocol, cipher, obfs, password: atob(password) }
   if (search) {
     const params = new URLSearchParams(search)
     proxy['obfs-param'] = atob(params.get('obfsparam'))
