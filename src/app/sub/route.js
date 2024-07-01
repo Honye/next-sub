@@ -52,8 +52,7 @@ const genSingBoxConfig = (proxies) => {
       })
       tags.push(proxy.name)
     } else if (proxy.type === 'ssr') {
-      // outbounds.push({})
-      // tags.push(proxy.name)
+      // sing-box not support
     } else if (proxy.type === 'vmess') {
       outbounds.push({
         type: 'vmess',
@@ -70,11 +69,23 @@ const genSingBoxConfig = (proxies) => {
     }
   }
   outbounds.push(
-    ...['Proxy', 'OpenAI', 'TikTok'].map((tag) => ({
+    {
+      tag: 'Wechat',
+      type: 'selector',
+      outbounds: ['Proxy', ...tags, 'DIRECT'],
+      default: 'DIRECT'
+    },
+    {
+      tag: 'Proxy',
+      type: 'selector',
+      outbounds: [...tags, 'DIRECT'],
+      default: tags[0] || 'DIRECT'
+    },
+    ...['OpenAI', 'TikTok'].map((tag) => ({
       tag,
       type: 'selector',
-      outbounds: tags,
-      default: tags[0]
+      outbounds: ['Proxy', ...tags, 'DIRECT'],
+      default: 'Proxy'
     })),
   )
   base.outbounds = [...base.outbounds, ...outbounds]
