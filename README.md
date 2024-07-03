@@ -1,16 +1,23 @@
 Maybe this isn't for you.
 
-Convert [Just My Socks](https://justmysocks.net/members/aff.php?aff=31408) (VMESS, SS) subscription to [Clash](https://clash.wiki/) configuration.
+Subscription Converter
 
-Also support:
+| Type | [Clash](https://clash.wiki/) | [sing-box](https://sing-box.sagernet.org/clients/apple/) |
+| :--- | :---- | :---- |
+| VMESS | ✓ | ✓ |
+| SS | ✓ | ✓ |
+| SSR | ✓ | ✗ (sing-box not support) |
 
-- [XLinkWorld](https://www.xlinkworld.cc) (SSR)
+Tested:
+
+- [Just My Socks](https://justmysocks.net/members/aff.php?aff=31408)
+- [XLinkWorld](https://www.xlinkworld.cc)
 
 Usage:
 
-One way is use {host}/sub?url={encoded_subscription_link}
+One way is use `{host}/sub?url={encoded_subscription_link}`
 
-Another way is use local server, add environment variable "SUBSCRIPTION_URL", {hose}/sub
+Another way is use local server, add environment variable `SUBSCRIPTION_URL`, then `{hose}/sub`
 
 sing-box: `{host}/sub?url={encoded_subscription_link}&target=sing`
 

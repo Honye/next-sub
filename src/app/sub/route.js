@@ -2,7 +2,7 @@ import path from 'node:path'
 import { Agent } from 'undici'
 import ejs from 'ejs'
 import { parseVmess, parseSS, parseSSR } from './parser'
-import base from './sing-box/base.json'
+import { genSingBoxConfig } from './sing-box'
 
 const subscription = process.env.SUBSCRIPTION_URL
 const confPath = path.resolve(process.cwd(), 'src/templates', 'config.ejs')
@@ -35,64 +35,6 @@ const fetchProxies = async (url) => {
 }
 
 /**
- * @param {import('./parser').ClashConfig[]} proxies
- */
-const genSingBoxConfig = (proxies) => {
-  const tags = []
-  const outbounds = []
-  for (const proxy of proxies) {
-    if (proxy.type === 'ss') {
-      outbounds.push({
-        type: 'shadowsocks',
-        tag: proxy.name,
-        server: proxy.server,
-        server_port: proxy.port,
-        method: proxy.cipher,
-        password: proxy.password,
-      })
-      tags.push(proxy.name)
-    } else if (proxy.type === 'ssr') {
-      // sing-box not support
-    } else if (proxy.type === 'vmess') {
-      outbounds.push({
-        type: 'vmess',
-        tag: proxy.name,
-        server: proxy.server,
-        server_port: proxy.port,
-        uuid: proxy.uuid,
-        security: proxy.cipher,
-        alter_id: proxy.alterId,
-        global_padding: false,
-        // "network": "tcp"
-      })
-      tags.push(proxy.name)
-    }
-  }
-  outbounds.push(
-    {
-      tag: 'Wechat',
-      type: 'selector',
-      outbounds: ['Proxy', ...tags, 'DIRECT'],
-      default: 'DIRECT'
-    },
-    {
-      tag: 'Proxy',
-      type: 'selector',
-      outbounds: [...tags, 'DIRECT'],
-      default: tags[0] || 'DIRECT'
-    },
-    ...['OpenAI', 'TikTok'].map((tag) => ({
-      tag,
-      type: 'selector',
-      outbounds: ['Proxy', ...tags, 'DIRECT'],
-      default: 'Proxy'
-    })),
-  )
-  base.outbounds = [...base.outbounds, ...outbounds]
-  return base
-}
-
-/**
  * @param {import('next/server').NextRequest} request
  */
 export async function GET(request) {
@@ -108,11 +50,11 @@ export async function GET(request) {
   }
 
   const proxies = await fetchProxies(url)
-  /** @type {'clash'|'sing'} */
-  const target = searchParams.get('target') || 'clash'
+  const target = /** @type {'clash'|'sing'} */(searchParams.get('target') || 'clash')
+  const include = searchParams.get('include')
 
   if (target === 'sing') {
-    const singBox = genSingBoxConfig(proxies)
+    const singBox = genSingBoxConfig(proxies, { include })
     return Response.json(singBox, { status: 200 })
   }
 
