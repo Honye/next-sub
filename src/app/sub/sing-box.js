@@ -50,7 +50,7 @@ export const genSingBoxConfig = (proxies, { include }) => {
   }
   outbounds.push(
     {
-      tag: 'Wechat',
+      tag: 'WeChat',
       type: 'selector',
       outbounds: ['Proxy', ...tags, 'DIRECT'],
       default: 'DIRECT'
