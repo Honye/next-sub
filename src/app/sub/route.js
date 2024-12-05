@@ -24,7 +24,8 @@ const fetchProxies = async (url) => {
   const countryEmoji = {
     US: '🇺🇸',
     JP: '🇯🇵',
-    CA: '🇨🇦'
+    CA: '🇨🇦',
+    NL: '🇳🇱'
   }
 
   /** @type {string[]} */
